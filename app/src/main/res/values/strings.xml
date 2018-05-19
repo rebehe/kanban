@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Kanban</string>
+    <string name="title_todo">To Do</string>
+    <string name="title_doing">Doing</string>
+    <string name="title_done">Done</string>
+    <string name="add_card">Add Card</string>
+</resources>
