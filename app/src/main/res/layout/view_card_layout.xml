@@ -28,6 +28,7 @@
         android:icon="@drawable/ic_baseline_add_24px"
         android:title="@string/delete_card"
         android:layout_alignParentRight="true"
+        android:onClick="deleteClickHandler"
         />
 </RelativeLayout>
 
