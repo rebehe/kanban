@@ -62,6 +62,14 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
+    /**
+     * This is to handle the delete button being clicked on an item
+     * @param v
+     */
+    private void deleteClickHandler(View v) {
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
