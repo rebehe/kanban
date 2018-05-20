@@ -4,4 +4,6 @@
     <string name="title_doing">Doing</string>
     <string name="title_done">Done</string>
     <string name="add_card">Add Card</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
 </resources>
