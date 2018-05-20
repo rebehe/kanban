@@ -12,6 +12,7 @@
         android:text="this is a card!"
         android:textAlignment="center"
         android:gravity="center"
-        style="@style/CardStyle" />
+        style="@style/CardStyle"
+        />
 
 </android.support.constraint.ConstraintLayout>

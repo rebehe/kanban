@@ -5,5 +5,6 @@
         android:id="@+id/action_add_card"
         android:icon="@drawable/ic_baseline_add_24px"
         android:title="@string/add_card"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"
+        />
 </menu>

@@ -1,7 +1,9 @@
-package com.henagle.www.kanban;
+package com.henagle.www.kanban.model;
 
 import android.content.Context;
 import android.util.Log;
+
+import com.henagle.www.kanban.model.Card;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

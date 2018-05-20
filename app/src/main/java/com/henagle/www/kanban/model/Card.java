@@ -1,4 +1,4 @@
-package com.henagle.www.kanban;
+package com.henagle.www.kanban.model;
 
 import java.io.Serializable;
 
