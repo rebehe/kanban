@@ -19,7 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.henagle.www.kanban.model.Card;
+import com.henagle.www.kanban.model.CardSerializer;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
         adapters = new HashMap<>();
 
         list = (ListView) findViewById(R.id.listOCards);
+
+        createAddCardDialog();
     }
 
     @Override
@@ -109,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Default to todo list
         list.setAdapter(adapters.get(Tab.TODO));
-        createAddCardDialog();
+        super.onResume();
     }
 
     @Override
@@ -188,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         public View getView(int position, View view, ViewGroup parent) {
             // inflate the layout for each list row
             if (view == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.card_layout, parent, false);
+                view = LayoutInflater.from(context).inflate(R.layout.view_card_layout, parent, false);
             }
 
             Card currentCard = (Card) getItem(position);
