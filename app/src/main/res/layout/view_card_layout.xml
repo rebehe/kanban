@@ -25,10 +25,11 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_margin="15dp"
-        android:icon="@drawable/ic_baseline_add_24px"
+        android:drawableTop="@drawable/ic_baseline_clear_24px"
         android:title="@string/delete_card"
         android:layout_alignParentRight="true"
         android:onClick="deleteClickHandler"
+        style="?android:attr/borderlessButtonStyle"
         />
 </RelativeLayout>
 
