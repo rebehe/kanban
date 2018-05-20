@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         adapters = new HashMap<>();
 
         list = (ListView) findViewById(R.id.listOCards);
+        createAddCardDialog();
     }
 
     @Override
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Default to todo list
         list.setAdapter(adapters.get(Tab.TODO));
-        createAddCardDialog();
+        super.onResume();
     }
 
     @Override
