@@ -17,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.henagle.www.kanban.model.Card;
@@ -63,6 +64,20 @@ public class MainActivity extends AppCompatActivity {
             return false;
         }
     };
+
+    /**
+     * This is to handle the delete button being clicked on an item
+     * @param v
+     */
+    public void deleteClickHandler(View v) {
+        RelativeLayout vwParentRow = (RelativeLayout)v.getParent();
+        int index = ((ViewGroup)vwParentRow.getParent()).indexOfChild(vwParentRow);
+        List<Card> currentList = tabLists.get(currentTab);
+        if (currentList.size() > index) {
+            currentList.remove(index);
+        }
+        adapters.get(currentTab).notifyDataSetChanged();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

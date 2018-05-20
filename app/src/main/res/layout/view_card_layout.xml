@@ -3,16 +3,34 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="65dp"
+    android:layout_margin="10dp"
+    style="@style/CardStyle">
+
     <TextView
         android:id="@+id/card"
         android:layout_width="match_parent"
-        android:layout_margin="10dp"
-        android:layout_marginVertical="5dp"
-        android:layout_height="65dp"
+        android:layout_height="match_parent"
         android:text="this is a card!"
-        android:textAlignment="center"
-        android:gravity="center"
-        style="@style/CardStyle"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/action_delete_card"
+    />
+
+    <Button
+        android:id="@+id/action_delete_card"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_margin="15dp"
+        android:drawableTop="@drawable/ic_baseline_clear_24px"
+        android:title="@string/delete_card"
+        android:layout_alignParentRight="true"
+        android:onClick="deleteClickHandler"
+        style="?android:attr/borderlessButtonStyle"
         />
+</RelativeLayout>
 
 </android.support.constraint.ConstraintLayout>
