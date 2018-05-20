@@ -1,10 +1,12 @@
 package com.henagle.www.kanban;
 
+import java.io.Serializable;
+
 /**
  * Created by rebeccahe on 5/19/18.
  */
 
-public class Card {
+public class Card implements Serializable {
 
     private String text;
 

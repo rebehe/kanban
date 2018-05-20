@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AlertDialog addCardDialog;
 
-    private enum Tab {
+    public enum Tab {
         TODO,
         DOING,
         DONE
@@ -74,30 +74,41 @@ public class MainActivity extends AppCompatActivity {
         // Set up app bar
         setSupportActionBar((Toolbar) findViewById(R.id.my_toolbar));
 
-        // Set up Lists
+        // Set up Lists and Adapters
         tabLists = new HashMap<>();
-        tabLists.put(Tab.TODO, new ArrayList<Card>());
-        tabLists.put(Tab.DOING, new ArrayList<Card>());
-        tabLists.put(Tab.DONE, new ArrayList<Card>());
-
-        // Initialize mock data
-        tabLists.get(Tab.TODO).add(new Card("Do the laundry"));
-        tabLists.get(Tab.TODO).add(new Card("Take out the trash"));
-
-        tabLists.get(Tab.DOING).add(new Card("Get a haircut"));
-
-        tabLists.get(Tab.DONE).add(new Card("Not finishing the project"));
-
-        // Set up adapters
         adapters = new HashMap<>();
+
+        list = (ListView) findViewById(R.id.listOCards);
+    }
+
+    @Override
+    protected void onPause() {
+        // Write all lists to files on pause for later recall
+        CardSerializer.writeListToFile(this.getApplicationContext(), CardSerializer.TODO_PATH, tabLists.get(Tab.TODO));
+        CardSerializer.writeListToFile(this.getApplicationContext(), CardSerializer.DOING_PATH, tabLists.get(Tab.DOING));
+        CardSerializer.writeListToFile(this.getApplicationContext(), CardSerializer.DONE_PATH, tabLists.get(Tab.DONE));
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        // Read all lists from separate files
+        List<Card> resumeTodoList = CardSerializer.readListFromFile(this.getApplicationContext(), CardSerializer.TODO_PATH);
+        List<Card> resumeDoingList = CardSerializer.readListFromFile(this.getApplicationContext(), CardSerializer.DOING_PATH);
+        List<Card> resumeDoneList = CardSerializer.readListFromFile(this.getApplicationContext(), CardSerializer.DONE_PATH);
+
+        // Place lists in the map for later use
+        tabLists.put(Tab.TODO, resumeTodoList);
+        tabLists.put(Tab.DOING, resumeDoingList);
+        tabLists.put(Tab.DONE, resumeDoneList);
+
+        // Set up adapters for resume
         adapters.put(Tab.TODO, new CardListAdapter(this, tabLists.get(Tab.TODO)));
         adapters.put(Tab.DOING, new CardListAdapter(this, tabLists.get(Tab.DOING)));
         adapters.put(Tab.DONE, new CardListAdapter(this, tabLists.get(Tab.DONE)));
 
-        list = (ListView) findViewById(R.id.listOCards);
+        // Default to todo list
         list.setAdapter(adapters.get(Tab.TODO));
-
-        // Dialog box for users to add new cards
         createAddCardDialog();
     }
 
