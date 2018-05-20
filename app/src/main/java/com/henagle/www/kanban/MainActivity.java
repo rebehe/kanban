@@ -1,9 +1,11 @@
 package com.henagle.www.kanban;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -12,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private Map<Tab, CardListAdapter> adapters;
     private Tab currentTab = Tab.TODO;
 
+    private AlertDialog addCardDialog;
 
     public enum Tab {
         TODO,
@@ -104,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Default to todo list
         list.setAdapter(adapters.get(Tab.TODO));
-        super.onResume();
+        createAddCardDialog();
     }
 
     @Override
@@ -118,11 +123,37 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_add_card) {
-            // Implement logic for letting the user create a card
-            tabLists.get(currentTab).add(new Card("You added a card!"));
-            adapters.get(currentTab).notifyDataSetChanged();
+            addCardDialog.show();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void createAddCardDialog() {
+        final EditText input = new EditText(MainActivity.this);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+
+        input.setLayoutParams(layoutParams);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(input);
+
+        builder.setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                String newCardText = input.getText().toString();
+                tabLists.get(currentTab).add(new Card(newCardText));
+                input.getText().clear();
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User cancelled the dialog
+            }
+        });
+
+        addCardDialog = builder.create();
     }
 
     /*
