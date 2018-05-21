@@ -51,8 +51,7 @@ public class DeckFragment extends Fragment {
      * @param view view of Card to be deleted
      */
     protected void deleteClickHandler(View view) {
-        RelativeLayout viewParentRow = (RelativeLayout) view.getParent();
-        int index = ((ViewGroup) viewParentRow.getParent()).indexOfChild(viewParentRow);
+        int index = deckListView.getPositionForView(view);
         if (deck.size() > index) {
             deck.remove(index);
         }
