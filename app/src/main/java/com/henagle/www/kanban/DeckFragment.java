@@ -1,19 +1,16 @@
 package com.henagle.www.kanban;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.henagle.www.kanban.model.Card;
 import com.henagle.www.kanban.model.Deck;
 import com.henagle.www.kanban.model.Page;
 
@@ -50,6 +47,11 @@ public class DeckFragment extends Fragment {
         deckAdapter = new DeckAdapter(deck);
         deckRecyclerView.setAdapter(deckAdapter);
 
+        // ItemTouchHelper
+        ItemTouchHelper.Callback callback = new CardTouchHelperCallback(deckAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(deckRecyclerView);
+
         return rootView;
     }
 
@@ -68,7 +70,7 @@ public class DeckFragment extends Fragment {
     /*
     This custom adapter is used to pass Deck data into a list view of Cards
      */
-    private class DeckAdapter extends RecyclerView.Adapter {
+    private class DeckAdapter extends RecyclerView.Adapter implements CardTouchHelperCallback.CardTouchHelperAdapter {
 
         private Deck deck;
 
@@ -88,6 +90,8 @@ public class DeckFragment extends Fragment {
         public DeckAdapter(Deck deck) {
             this.deck = deck;
         }
+
+        // --- Override methods from RecyclerView.Adapter ---
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -110,6 +114,29 @@ public class DeckFragment extends Fragment {
         @Override
         public int getItemCount() {
             return deck.size();
+        }
+
+        // --- Override methods from CardTouchHelperAdapter ---
+
+        @Override
+        public boolean onItemMove(int fromPosition, int toPosition) {
+            if (fromPosition < toPosition) {
+                for (int i = fromPosition; i < toPosition; i++) {
+                    deck.swap(i, i + 1);
+                }
+            } else {
+                for (int i = fromPosition; i > toPosition; i--) {
+                    deck.swap(i, i - 1);
+                }
+            }
+            notifyItemMoved(fromPosition, toPosition);
+            return true;
+        }
+
+        @Override
+        public void onItemDismiss(int position) {
+            deck.remove(position);
+            notifyItemRemoved(position);
         }
 
     }
