@@ -3,6 +3,8 @@ package com.henagle.www.kanban;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,10 +25,10 @@ import com.henagle.www.kanban.model.Page;
 
 public class DeckFragment extends Fragment {
 
-    private ListView deckListView;
-
-    private Deck deck;
+    private RecyclerView deckRecyclerView;
     private DeckAdapter deckAdapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private Deck deck;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,10 +40,15 @@ public class DeckFragment extends Fragment {
         Page page = Page.values()[args.getInt(DeckPagerAdapter.CURRENT_PAGE_ARG)];
         deck = MainActivity.decks.get(page);
 
-        // Update list view with deck data
-        deckListView = rootView.findViewById(R.id.deck_list_view);
-        deckAdapter = new DeckAdapter(getContext(), deck);
-        deckListView.setAdapter(deckAdapter);
+        deckRecyclerView = rootView.findViewById(R.id.deck_recycler_view);
+
+        // Use a layout manager
+        layoutManager = new LinearLayoutManager(getContext());
+        deckRecyclerView.setLayoutManager(layoutManager);
+
+        // Specify an adapter
+        deckAdapter = new DeckAdapter(deck);
+        deckRecyclerView.setAdapter(deckAdapter);
 
         return rootView;
     }
@@ -51,53 +58,58 @@ public class DeckFragment extends Fragment {
      * @param view view of Card to be deleted
      */
     protected void deleteClickHandler(View view) {
-        int index = deckListView.getPositionForView(view);
-        if (deck.size() > index) {
-            deck.remove(index);
-        }
+//        int index = deckRecyclerView.getPositionForView(view);
+//        if (deck.size() > index) {
+//            deck.remove(index);
+//        }
         deckAdapter.notifyDataSetChanged();
     }
 
     /*
     This custom adapter is used to pass Deck data into a list view of Cards
      */
-    private class DeckAdapter extends BaseAdapter {
+    private class DeckAdapter extends RecyclerView.Adapter {
 
-        private Context context;
         private Deck deck;
 
-        public DeckAdapter(Context context, Deck deck) {
-            this.context = context;
+        // Provides a reference to the views for each data item
+        // Provide access to all views for a data item in a view holder
+        public class CardViewHolder extends RecyclerView.ViewHolder {
+
+            public RelativeLayout cardLayout;
+            // TODO: Move Card TextView and X button to separate layout files
+
+            public CardViewHolder(RelativeLayout cardLayout) {
+                super(cardLayout);
+                this.cardLayout = cardLayout;
+            }
+        }
+
+        public DeckAdapter(Deck deck) {
             this.deck = deck;
         }
 
         @Override
-        public int getCount() {
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            RelativeLayout cardLayout = (RelativeLayout) LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.view_card_layout, parent, false);
+
+            CardViewHolder cardViewHolder = new CardViewHolder(cardLayout);
+            return cardViewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            // Get Card from Deck at this position
+            // Replace the contents of the view with that Card's text
+            CardViewHolder cardViewHolder = (CardViewHolder) holder;
+            TextView cardTextView = (TextView) cardViewHolder.cardLayout.getChildAt(0);
+            cardTextView.setText(deck.get(position).getText());
+        }
+
+        @Override
+        public int getItemCount() {
             return deck.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return deck.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View view, ViewGroup parent) {
-            if (view == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.view_card_layout, parent, false);
-            }
-
-            // Update card text
-            Card card = (Card) getItem(position);
-            TextView cardTextView = view.findViewById(R.id.card);
-            cardTextView.setText(card.getText());
-
-            return view;
         }
 
     }
