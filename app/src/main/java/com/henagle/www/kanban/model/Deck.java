@@ -2,6 +2,7 @@ package com.henagle.www.kanban.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -86,6 +87,15 @@ public class Deck implements Serializable, Iterable<Card> {
      */
     public Card remove(int index) {
         return deck.remove(index);
+    }
+
+    /**
+     * Swap values at indeces i and j in the deck
+     * @param i
+     * @param j
+     */
+    public void swap(int i, int j) {
+        Collections.swap(deck, i, j);
     }
 
 }
