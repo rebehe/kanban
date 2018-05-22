@@ -2,6 +2,7 @@ package com.henagle.www.kanban;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -30,15 +31,6 @@ public class MainActivity extends AppCompatActivity {
     private DeckPagerAdapter viewPagerAdapter;
     private AlertDialog addCardDialog;
 
-    /**
-     * Handle card deletion by delegating to the current fragment
-     * @param view view of Card to be deleted
-     */
-    public void deleteClickHandler(View view) {
-        DeckFragment currentFragment = (DeckFragment) viewPagerAdapter.getItem(viewPager.getCurrentItem());
-        currentFragment.deleteClickHandler(view);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +49,10 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.view_pager);
         viewPagerAdapter = new DeckPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(viewPagerAdapter);
+
+        // Create tabs
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
 
         createAddCardDialog();
     }
